@@ -1,5 +1,3 @@
 function execute(node: SQLNode): SQLResult {
-    throw new Error("Not implemented");
+    throw new NotImplementedError("SQL Execution");
 }
-
-type SQLResult = never;
