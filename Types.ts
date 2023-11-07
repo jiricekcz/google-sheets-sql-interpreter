@@ -50,7 +50,24 @@ interface SQLAll extends SQLExpression {
     type: "all";
 }
 
-type SQLNode = SQLString | SQLNumber | SQLNoExpression | SQLBoolean | SQLNull | SQLSelectFrom | SQLIdentifier | SQLWhere | SQLAND | SQLOR | SQLAll;
+interface NonLeadingClauseStep {
+    node: SQLNode;
+    clause: NonLeadingClause;
+    nextIndex: number;
+}
+
+interface SQLNot extends SQLExpression {
+    type: "not";
+    operand: SQLNode;
+}
+
+interface SequenceOfNonLeadingClauses {
+    operators: NonLeadingClause[];
+    operands: SQLNode[];
+
+}
+type NonLeadingClause = "WHERE" | "OR" | "AND";
+type SQLNode = SQLString | SQLNumber | SQLNoExpression | SQLBoolean | SQLNull | SQLSelectFrom | SQLIdentifier | SQLWhere | SQLAND | SQLOR | SQLAll | SQLNot;
 
 
 

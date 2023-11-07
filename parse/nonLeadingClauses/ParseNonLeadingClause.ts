@@ -5,19 +5,17 @@ function hasNonLeadingClause(input: string, from: number, to: number): boolean {
     return ["WHERE", "OR", "AND"].includes(word.toUpperCase());
 }
 
-function parseNonLeadingClause(input: string, from: number, to: number, firstNode: SQLNode): ParsedStep {
+function parseNonLeadingClause(input: string, from: number, to: number, doParseNonLeadingClause = true): NonLeadingClauseStep {
     from = jumpWhitespace(input, from, to);
-    const word = firstWord(input, from, to);
+    const word = firstWord(input, from, to).toLocaleUpperCase();
 
-    switch (word.toUpperCase()) {
+    switch (word) {
         case "WHERE": {
-            const { node, nextIndex } = parseWhere(input, from, to, firstNode);
-            return { node, nextIndex };
+            return parseWhere(input, from, to, doParseNonLeadingClause);
         }
         case "OR":
         case "AND": {
-            const { node, nextIndex } = parseLogical(input, from, to, firstNode, word as "OR" | "AND");
-            return { node, nextIndex };
+            return parseLogical(input, from, to, word as "OR" | "AND", doParseNonLeadingClause);
         }
         default: {
             throw new ParseError(input, from, to, "Unexpected token");
