@@ -1,6 +1,6 @@
-function parseLogical(input: string, from: number, to: number, firstNode: SQLNode, operator: "AND" | "OR"): {node: SQLAND | SQLOR, nextIndex: number} {
+function parseLogical(input: string, from: number, to: number, operator: "AND" | "OR", doParseNonLeadingClause = true): {node: SQLNode, nextIndex: number, clause: "AND" | "OR"} {
     from = jumpWhitespace(input, from + operator.length, to);
-    const { node: right, nextIndex } = parseText(input, from, to);
+    const { node, nextIndex } = parseText(input, from, to, doParseNonLeadingClause);
 
-    return { node: { type: operator.toLowerCase() as "or" | "and", left: firstNode, right }, nextIndex };
+    return { node, nextIndex, clause: operator };
 }

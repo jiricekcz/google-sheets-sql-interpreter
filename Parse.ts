@@ -58,6 +58,11 @@ function parseText(input: string, from: number, to: number, doParseNonLeadingCla
             node = value.node;
             from = value.nextIndex;
         } break;
+        case "NOT": {
+            const value = parseNot(input, from, to);
+            node = value.node;
+            from = value.nextIndex;
+        } break;
         default: {
             const value = parseBare(input, from, to);
             node = value.node;
@@ -65,13 +70,22 @@ function parseText(input: string, from: number, to: number, doParseNonLeadingCla
         } break;
     }
     from = jumpWhitespace(input, from, to);
-
+    const nonLeadingClauses: NonLeadingClauseStep[] = [];
     if (doParseNonLeadingClause) while (hasNonLeadingClause(input, from, to)) {
-        const value = parseNonLeadingClause(input, from, to, node);
-        node = value.node;
+        const value = parseNonLeadingClause(input, from, to, false);
+        nonLeadingClauses.push(value);
         from = value.nextIndex;
         from = jumpWhitespace(input, from, to);
     }
+    const sequence: SequenceOfNonLeadingClauses = {
+        operands: [node],
+        operators: []
+    };
+    for (const clause of nonLeadingClauses) {
+        sequence.operands.push(clause.node);
+        sequence.operators.push(clause.clause);
+    }
+    node = parseSeqenceOfNonLeadingClauses(sequence);
 
     return { node, nextIndex: from };
 }
@@ -113,4 +127,46 @@ function findEndBracket(input: string, from: number, to: number): number {
         i++;
     }
     throw new ParseError(input, from, to, "Expected closing bracket to opening bracket at " + input.substring(from - 3, from + 4));
+}
+
+function parseSeqenceOfNonLeadingClauses(sequence: SequenceOfNonLeadingClauses): SQLNode {
+    for (const currentOperators of orderOfOperations) {
+        for (let i = 0; i < sequence.operators.length; i++) {
+            const operator = sequence.operators[i];
+            if (!currentOperators.includes(operator)) continue;
+            const left = sequence.operands[i];
+            const right = sequence.operands[i + 1];
+
+            switch (operator) {
+                case "WHERE": {
+                    const node: SQLWhere = {
+                        type: "where",
+                        operand: left,
+                        condition: right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "OR": {
+                    const node: SQLOR = {
+                        type: "or",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "AND": {
+                    const node: SQLAND = {
+                        type: "and",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+            }
+            sequence.operands.splice(i + 1, 1);
+            sequence.operators.splice(i, 1);
+        }
+    }
+    if (sequence.operands.length !== 1) throw new Error("Unparseable binary operators: " + sequence.operators.join(", "));
+    return sequence.operands[0];
 }
