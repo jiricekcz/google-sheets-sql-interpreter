@@ -72,7 +72,7 @@ function parseText(input: string, from: number, to: number, doParseNonLeadingCla
     from = jumpWhitespace(input, from, to);
     const nonLeadingClauses: NonLeadingClauseStep[] = [];
     if (doParseNonLeadingClause) while (hasNonLeadingClause(input, from, to)) {
-        const value = parseNonLeadingClause(input, from, to, false);
+        const value = parseNonLeadingClause(input, from, to);
         nonLeadingClauses.push(value);
         from = value.nextIndex;
         from = jumpWhitespace(input, from, to);
@@ -162,6 +162,95 @@ function parseSeqenceOfNonLeadingClauses(sequence: SequenceOfNonLeadingClauses):
                     };
                     sequence.operands[i] = node
                 } break;
+                case "=": {
+                    const node: SQLEquals = {
+                        type: "equals",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "<>": {
+                    const node: SQLNotEquals = {
+                        type: "notEquals",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "<": {
+                    const node: SQLLessThan = {
+                        type: "lessThan",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case ">": {
+                    const node: SQLGreaterThan = {
+                        type: "greaterThan",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "<=": {
+                    const node: SQLLessThanOrEqual = {
+                        type: "lessThanOrEqual",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case ">=": {
+                    const node: SQLGreaterThanOrEqual = {
+                        type: "greaterThanOrEqual",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "+": {
+                    const node: SQLAddition = {
+                        type: "addition",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "-": {
+                    const node: SQLSubtraction = {
+                        type: "subtraction",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "*": {
+                    const node: SQLMultiplication = {
+                        type: "multiplication",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "/": {
+                    const node: SQLDivision = {
+                        type: "division",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "%": {
+                    const node: SQLModulo = {
+                        type: "modulo",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                default: throw new Error("Unknown operator: " + operator);
             }
             sequence.operands.splice(i + 1, 1);
             sequence.operators.splice(i, 1);

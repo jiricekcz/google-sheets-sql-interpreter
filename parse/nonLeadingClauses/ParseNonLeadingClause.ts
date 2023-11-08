@@ -2,10 +2,11 @@ function hasNonLeadingClause(input: string, from: number, to: number): boolean {
     from = jumpWhitespace(input, from, to);
     const word = firstWord(input, from, to);
 
-    return ["WHERE", "OR", "AND"].includes(word.toUpperCase());
+    return ["WHERE", "OR", "AND", "=", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "%"].includes(word.toUpperCase());
 }
 
-function parseNonLeadingClause(input: string, from: number, to: number, doParseNonLeadingClause = true): NonLeadingClauseStep {
+function parseNonLeadingClause(input: string, from: number, to: number): NonLeadingClauseStep {
+    const doParseNonLeadingClause = false;
     from = jumpWhitespace(input, from, to);
     const word = firstWord(input, from, to).toLocaleUpperCase();
 
@@ -16,6 +17,21 @@ function parseNonLeadingClause(input: string, from: number, to: number, doParseN
         case "OR":
         case "AND": {
             return parseLogical(input, from, to, word as "OR" | "AND", doParseNonLeadingClause);
+        }
+        case "=":
+        case "<>":
+        case "<":
+        case ">":
+        case "<=":
+        case ">=": {
+            return parseComparator(input, from, to, word as "=" | "<>" | "<" | ">" | "<=" | ">=", doParseNonLeadingClause);
+        }
+        case "+":
+        case "-":
+        case "*":
+        case "/":
+        case "%": {
+            return parseArithmetic(input, from, to, word as "+" | "-" | "*" | "/" | "%", doParseNonLeadingClause);
         }
         default: {
             throw new ParseError(input, from, to, "Unexpected token");
