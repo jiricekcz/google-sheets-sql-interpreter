@@ -1,6 +1,7 @@
-function SQLInterpret(query: string): SheetsArgument {
-    const result = parse(query);
-    return JSON.stringify(result, null, 4);
+function SQLInterpret(query: string): any {
+    const parsed = parse(query);
+    const executed = run(parsed).map(v => v.toString());
+    return executed[0];
 }
 
 

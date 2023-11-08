@@ -1,4 +1,4 @@
-function parseString(input: string, from: number, to: number): { node: SQLString, nextIndex: number } {
+function parseString(input: string, from: number, to: number): { node: SQLStringLiteral, nextIndex: number } {
     let i = from;
     let result = "";
     const quote = input[i];
@@ -15,6 +15,6 @@ function parseString(input: string, from: number, to: number): { node: SQLString
         i++;
     }
     if (input[i] !== quote) throw new ParseError(input, from, to, "Expected closing quote for string");
-    return { node: { type: "string", value: result }, nextIndex: i + 1 };
+    return { node: { type: "stringLiteral", value: result }, nextIndex: i + 1 };
 
 }
