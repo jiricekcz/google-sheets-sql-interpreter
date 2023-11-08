@@ -2,9 +2,9 @@ abstract class SQLValue {
 
 }
 
-abstract class SQLPrimitiveBase<T extends string | number | null> extends SQLValue {
+abstract class SQLPrimitiveBase<T extends string | number | null | boolean> extends SQLValue {
     abstract valueOf(): T;
-    abstract toString(): string; 
+    abstract toString(): string;
 }
 
 class SQLNumber extends SQLPrimitiveBase<number> {
@@ -40,7 +40,19 @@ class SQLNull extends SQLPrimitiveBase<null> {
     }
 }
 
-type SQLPrimitive = SQLNumber | SQLString | SQLNull;
+class SQLBoolean extends SQLPrimitiveBase<boolean> {
+    constructor(public value: boolean) {
+        super();
+    }
+    valueOf() {
+        return this.value;
+    }
+    toString() {
+        return this.value.toString();
+    }
+}
+
+type SQLPrimitive = SQLNumber | SQLString | SQLNull | SQLBoolean;
 
 
 abstract class SQLObjectBase extends SQLValue {

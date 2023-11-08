@@ -7,7 +7,7 @@ function parse(input: string): SQLNode[] {
         nodes.push(v.node);
         i = jumpWhitespace(input, v.nextIndex, to);
     } while (input[i] === ";");
-    if (i < to) throw new ParseError(input, i, Math.min(to, i + 15), "Unexpected token");
+    if (i < to) throw new ParseError(input, i, Math.min(to, i + 15), "Unexpected token after expression");
     return nodes;
 }
 
@@ -23,7 +23,7 @@ function parseText(input: string, from: number, to: number, doParseNonLeadingCla
         const endBracket = findEndBracket(input, from, to);
         const value = parseText(input, from, endBracket);
 
-        if (jumpWhitespace(input, value.nextIndex, to) < endBracket) throw new ParseError(input, value.nextIndex, endBracket, "Unexpected token");
+        if (jumpWhitespace(input, value.nextIndex, to) < endBracket) throw new ParseError(input, value.nextIndex, endBracket, "Unexpected token while finding brackets");
         return {
             node: value.node,
             nextIndex: endBracket + 1
@@ -111,7 +111,7 @@ function isWhitespace(char: string): boolean {
 }
 
 function isWordTerminatingCharcter(char: string): boolean {
-    return isWhitespace(char) || ["+","-","*","/","%","(",")"].includes(char);
+    return isWhitespace(char) || ["+", "-", "*", "/", "%", "(", ")", "=", "<", ">"].includes(char);
 }
 function jumpWhitespace(input: string, from: number, to: number): number {
     let i = from;

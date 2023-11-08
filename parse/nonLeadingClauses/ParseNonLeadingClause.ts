@@ -2,7 +2,7 @@ function hasNonLeadingClause(input: string, from: number, to: number): boolean {
     from = jumpWhitespace(input, from, to);
     const word = firstWord(input, from, to);
 
-    return ["WHERE", "OR", "AND"].includes(word.toUpperCase()) || ["<=", ">=", "<>"].includes(input.substring(from, from + 2)) || ["=", "<", ">", "+", "-", "*", "/", "%"].includes(input.substring(from, from + 1));
+    return ["WHERE", "OR", "AND"].includes(word.toUpperCase()) || ["<=", ">=", "<>"].some(v => startsWith(input, from, to, v)) || ["=", "<", ">", "+", "-", "*", "/", "%"].some(v => startsWith(input, from, to, v));
 }
 
 function parseNonLeadingClause(input: string, from: number, to: number): NonLeadingClauseStep {
@@ -28,5 +28,5 @@ function parseNonLeadingClause(input: string, from: number, to: number): NonLead
     if (startsWith(input, from, to, "+") || startsWith(input, from, to, "-") || startsWith(input, from, to, "*") || startsWith(input, from, to, "/") || startsWith(input, from, to, "%")) {
         return parseArithmetic(input, from, to, input.substring(from, from + 1) as "+" | "-" | "*" | "/" | "%", doParseNonLeadingClause);
     }
-    throw new ParseError(input, from, to, `Unexpected token`);
+    throw new ParseError(input, from, to, `Unexpected token as non-leading clause: ${word}`);
 }
