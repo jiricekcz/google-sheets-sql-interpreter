@@ -100,7 +100,7 @@ function startsWith(input: string, from: number, to: number, start: string | str
 
 function firstWord(input: string, from: number, to: number): string {
     let i = from;
-    while (i < to && !isWhitespace(input[i])) {
+    while (i < to && !isWordTerminatingCharcter(input[i])) {
         i++;
     }
     return input.substring(from, i);
@@ -108,6 +108,10 @@ function firstWord(input: string, from: number, to: number): string {
 
 function isWhitespace(char: string): boolean {
     return char === " " || char === "\n" || char === "\t";
+}
+
+function isWordTerminatingCharcter(char: string): boolean {
+    return isWhitespace(char) || ["+","-","*","/","%","(",")"].includes(char);
 }
 function jumpWhitespace(input: string, from: number, to: number): number {
     let i = from;
