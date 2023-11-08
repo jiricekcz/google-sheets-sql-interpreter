@@ -2,7 +2,7 @@ function hasNonLeadingClause(input: string, from: number, to: number): boolean {
     from = jumpWhitespace(input, from, to);
     const word = firstWord(input, from, to);
 
-    return ["WHERE", "OR", "AND", "=", "<>", "<", ">", "<=", ">="].includes(word.toUpperCase());
+    return ["WHERE", "OR", "AND", "=", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "%"].includes(word.toUpperCase());
 }
 
 function parseNonLeadingClause(input: string, from: number, to: number): NonLeadingClauseStep {
