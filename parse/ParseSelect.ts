@@ -17,7 +17,7 @@ function parseSelect(input: string, from: number, to: number): { node: SQLSelect
         i = jumpWhitespace(input, i + ",".length, to);
     } while (true);
 
-    if (!startsWith(input, i, to, "FROM")) throw new ParseError(input, i, to, "Expected FROM as part of the SELECT ... FROM statement");
+    if (firstWord(input, i, to).toUpperCase() != "FROM") throw new ParseError(input, i, to, "Expected FROM as part of the SELECT ... FROM statement");
 
     i += "FROM".length;
 
