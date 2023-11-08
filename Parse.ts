@@ -111,7 +111,7 @@ function isWhitespace(char: string): boolean {
 }
 
 function isWordTerminatingCharcter(char: string): boolean {
-    return isWhitespace(char) || ["+", "-", "*", "/", "%", "(", ")", "=", "<", ">"].includes(char);
+    return isWhitespace(char) || ["+", "-", "*", "/", "%", "(", ")", "=", "<", ">", ","].includes(char);
 }
 function jumpWhitespace(input: string, from: number, to: number): number {
     let i = from;

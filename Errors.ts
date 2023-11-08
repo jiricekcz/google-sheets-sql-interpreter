@@ -66,11 +66,11 @@ class RuntimeError extends Error {
     }
 }
 
-class SQLTypeError extends RuntimeError {
+class DatabaseError  extends Error {
     constructor(message: string) {
         super(message);
         // @ts-ignore
-        this.name = "TypeError";
+        this.name = "DatabaseError";
 
         // @ts-ignore
         if (Error.captureStackTrace) {
