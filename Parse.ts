@@ -162,6 +162,55 @@ function parseSeqenceOfNonLeadingClauses(sequence: SequenceOfNonLeadingClauses):
                     };
                     sequence.operands[i] = node
                 } break;
+                case "=": {
+                    const node: SQLEquals = {
+                        type: "equals",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "!=": {
+                    const node: SQLNotEquals = {
+                        type: "notEquals",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "<": {
+                    const node: SQLLessThan = {
+                        type: "lessThan",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case ">": {
+                    const node: SQLGreaterThan = {
+                        type: "greaterThan",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case "<=": {
+                    const node: SQLLessThanOrEqual = {
+                        type: "lessThanOrEqual",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                case ">=": {
+                    const node: SQLGreaterThanOrEqual = {
+                        type: "greaterThanOrEqual",
+                        left,
+                        right
+                    };
+                    sequence.operands[i] = node
+                } break;
+                default: throw new Error("Unknown operator: " + operator);
             }
             sequence.operands.splice(i + 1, 1);
             sequence.operators.splice(i, 1);

@@ -61,13 +61,51 @@ interface SQLNot extends SQLExpression {
     operand: SQLNode;
 }
 
+interface SQLEquals extends SQLExpression {
+    type: "equals";
+    left: SQLNode;
+    right: SQLNode;
+}
+
+interface SQLNotEquals extends SQLExpression {
+    type: "notEquals";
+    left: SQLNode;
+    right: SQLNode;
+}
+
+interface SQLLessThan extends SQLExpression {
+    type: "lessThan";
+    left: SQLNode;
+    right: SQLNode;
+}
+
+interface SQLGreaterThan extends SQLExpression {
+    type: "greaterThan";
+    left: SQLNode;
+    right: SQLNode;
+}
+
+interface SQLLessThanOrEqual extends SQLExpression {
+    type: "lessThanOrEqual";
+    left: SQLNode;
+    right: SQLNode;
+}
+
+interface SQLGreaterThanOrEqual extends SQLExpression {
+    type: "greaterThanOrEqual";
+    left: SQLNode;
+    right: SQLNode;
+}
+
 interface SequenceOfNonLeadingClauses {
     operators: NonLeadingClause[];
     operands: SQLNode[];
 
 }
-type NonLeadingClause = "WHERE" | "OR" | "AND";
-type SQLNode = SQLString | SQLNumber | SQLNoExpression | SQLBoolean | SQLNull | SQLSelectFrom | SQLIdentifier | SQLWhere | SQLAND | SQLOR | SQLAll | SQLNot;
+type NonLeadingClause = "WHERE" | "OR" | "AND" | "=" | "!=" | "<" | ">" | "<=" | ">=";
+type SQLNode = SQLString | SQLNumber | SQLNoExpression | SQLBoolean | SQLNull | SQLSelectFrom | SQLIdentifier | SQLWhere |
+    SQLAND | SQLOR | SQLAll | SQLNot |
+    SQLEquals | SQLNotEquals | SQLLessThan | SQLGreaterThan | SQLLessThanOrEqual | SQLGreaterThanOrEqual;
 
 
 
