@@ -9,6 +9,7 @@ function executeStatement(statement: SQLNode): ExecutionResult {
         case "subtraction": return executeSubtracion(statement);
         case "multiplication": return executeMultiplication(statement);
         case "numberLiteral": return executeNumberLiteral(statement);
+        case "equals": return executeEquals(statement);
         default: throw new RuntimeError(`Unknown statement type ${statement.type}`);
     }
 }
