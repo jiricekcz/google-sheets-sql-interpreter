@@ -2,7 +2,7 @@ function hasNonLeadingClause(input: string, from: number, to: number): boolean {
     from = jumpWhitespace(input, from, to);
     const word = firstWord(input, from, to);
 
-    return ["WHERE", "OR", "AND", "=", "<>", "<", ">", "<=", ">=", "+", "-", "*", "/", "%"].includes(word.toUpperCase());
+    return ["WHERE", "OR", "AND"].includes(word.toUpperCase()) || ["<=", ">=", "<>"].includes(input.substring(from, from + 2)) || ["=", "<", ">", "+", "-", "*", "/", "%"].includes(input.substring(from, from + 1));
 }
 
 function parseNonLeadingClause(input: string, from: number, to: number): NonLeadingClauseStep {
@@ -18,23 +18,15 @@ function parseNonLeadingClause(input: string, from: number, to: number): NonLead
         case "AND": {
             return parseLogical(input, from, to, word as "OR" | "AND", doParseNonLeadingClause);
         }
-        case "=":
-        case "<>":
-        case "<":
-        case ">":
-        case "<=":
-        case ">=": {
-            return parseComparator(input, from, to, word as "=" | "<>" | "<" | ">" | "<=" | ">=", doParseNonLeadingClause);
-        }
-        case "+":
-        case "-":
-        case "*":
-        case "/":
-        case "%": {
-            return parseArithmetic(input, from, to, word as "+" | "-" | "*" | "/" | "%", doParseNonLeadingClause);
-        }
-        default: {
-            throw new ParseError(input, from, to, "Unexpected token");
-        }
     }
+    if (startsWith(input, from, to, "=") || startsWith(input, from, to, "<") || startsWith(input, from, to, ">")) {
+        return parseComparator(input, from, to, input.substring(from, from + 1) as "=" | "<" | ">", doParseNonLeadingClause);
+    }
+    if (startsWith(input, from, to, "<=") || startsWith(input, from, to, "<>") || startsWith(input, from, to, ">=")) {
+        return parseComparator(input, from, to, input.substring(from, from + 2) as "<=" | "<>" | ">=", doParseNonLeadingClause);
+    }
+    if (startsWith(input, from, to, "+") || startsWith(input, from, to, "-") || startsWith(input, from, to, "*") || startsWith(input, from, to, "/") || startsWith(input, from, to, "%")) {
+        return parseArithmetic(input, from, to, input.substring(from, from + 1) as "+" | "-" | "*" | "/" | "%", doParseNonLeadingClause);
+    }
+    throw new ParseError(input, from, to, `Unexpected token`);
 }
