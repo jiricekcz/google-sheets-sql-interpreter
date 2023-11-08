@@ -1,4 +1,4 @@
-function parse(input: string): SQLNode {
+function parse(input: string): SQLNode[] {
     let i = 0;
     let to = input.length;
     let nodes: SQLNode[] = [];
@@ -8,7 +8,7 @@ function parse(input: string): SQLNode {
         i = jumpWhitespace(input, v.nextIndex, to);
     } while (input[i] === ";");
     if (i < to) throw new ParseError(input, i, Math.min(to, i + 15), "Unexpected token");
-    return nodes[0];
+    return nodes;
 }
 
 
@@ -42,15 +42,15 @@ function parseText(input: string, from: number, to: number, doParseNonLeadingCla
         from = v.nextIndex;
     } else switch (firstWord(input, from, to).toUpperCase()) {
         case "TRUE":
-            node = { type: "boolean", value: true };
+            node = { type: "booleanLiteral", value: true };
             from = from + "TRUE".length;
             break;
         case "FALSE":
-            node = { type: "boolean", value: false };
+            node = { type: "booleanLiteral", value: false };
             from = from + "FALSE".length;
             break;
         case "NULL":
-            node = { type: "null" };
+            node = { type: "nullLiteral" };
             from = from + "NULL".length;
             break;
         case "SELECT": {

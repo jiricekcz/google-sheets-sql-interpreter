@@ -1,23 +1,23 @@
 interface SQLExpression {
     type: string;
 }
-interface SQLString extends SQLExpression {
-    type: "string";
+interface SQLStringLiteral extends SQLExpression {
+    type: "stringLiteral";
     value: string;
 }
-interface SQLNumber extends SQLExpression {
-    type: "number";
+interface SQLNumberLiteral extends SQLExpression {
+    type: "numberLiteral";
     value: number;
 }
 interface SQLNoExpression extends SQLExpression {
     type: "noExpression";
 }
-interface SQLBoolean extends SQLExpression {
-    type: "boolean";
+interface SQLBooleanLiteral extends SQLExpression {
+    type: "booleanLiteral";
     value: boolean;
 }
-interface SQLNull extends SQLExpression {
-    type: "null";
+interface SQLNullLiteral extends SQLExpression {
+    type: "nullLiteral";
 }
 interface SQLSelectFrom extends SQLExpression {
     type: "selectFrom";
@@ -133,14 +133,11 @@ interface SequenceOfNonLeadingClauses {
 
 }
 type NonLeadingClause = "WHERE" | "OR" | "AND" | "=" | "<>" | "<" | ">" | "<=" | ">=" | "+" | "-" | "*" | "/" | "%";
-type SQLNode = SQLString | SQLNumber | SQLNoExpression | SQLBoolean | SQLNull | SQLSelectFrom | SQLIdentifier | SQLWhere |
+type SQLNode = SQLStringLiteral | SQLNumberLiteral | SQLNoExpression | SQLBooleanLiteral | SQLNullLiteral | SQLSelectFrom | SQLIdentifier | SQLWhere |
     SQLAND | SQLOR | SQLAll | SQLNot |
     SQLEquals | SQLNotEquals | SQLLessThan | SQLGreaterThan | SQLLessThanOrEqual | SQLGreaterThanOrEqual |
     SQLAddition | SQLSubtraction | SQLMultiplication | SQLDivision | SQLModulo;
 
-
-
-type SQLResult = never;
 
 type Cell = string | number | boolean | null;
 type SheetsArgument = Cell | Cell[][];
@@ -149,3 +146,4 @@ interface ParsedStep {
     node: SQLNode;
     nextIndex: number;
 }
+

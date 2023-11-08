@@ -49,3 +49,33 @@ class StringIdentifyError extends ParseError {
     }
 }
 
+
+
+
+class RuntimeError extends Error {
+    constructor(message: string) {
+        super(message);
+        // @ts-ignore
+        this.name = "RuntimeError";
+
+        // @ts-ignore
+        if (Error.captureStackTrace) {
+            // @ts-ignore
+            Error.captureStackTrace(this, ParseError);
+        }
+    }
+}
+
+class SQLTypeError extends RuntimeError {
+    constructor(message: string) {
+        super(message);
+        // @ts-ignore
+        this.name = "TypeError";
+
+        // @ts-ignore
+        if (Error.captureStackTrace) {
+            // @ts-ignore
+            Error.captureStackTrace(this, ParseError);
+        }
+    }
+}
