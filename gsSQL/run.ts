@@ -6,6 +6,8 @@ function run(statements: SQLNode[]): SQLResult[] {
 function executeStatement(statement: SQLNode): ExecutionResult {
     switch (statement.type) {
         case "addition": return executeAddition(statement);
+        case "subtraction": return executeSubtracion(statement);
+        case "multiplication": return executeMultiplication(statement);
         case "numberLiteral": return executeNumberLiteral(statement);
         default: throw new RuntimeError(`Unknown statement type ${statement.type}`);
     }
