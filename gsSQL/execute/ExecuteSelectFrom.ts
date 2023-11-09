@@ -11,10 +11,11 @@ function selectFrom(node: SQLSelectFrom, context: Context): SQLTable {
     if (node.distinct) throw new RuntimeError('DISTINCT not implemented');
     const tables = node.from.map(from => executeStatement(from, context).result).map(table => {
         if (table instanceof SQLTable) return table;
+        if (table instanceof SQLIdentifierValue) throw new RuntimeError(`Cannot find table ${table.name}`);
         throw new RuntimeError(`Cannot SELECT FROM a ${table.constructor.name}`);
     })
     const table = tables.length == 1 ? tables[0]: mergeTables(tables);
-    
+
     const fields = node.select.map(select => executeStatement(select, context).result).map(field => {
         if (field instanceof SQLIdentifierValue) return field;
         throw new RuntimeError(`Cannot SELECT a ${field.constructor.name}, only identifiers`);
