@@ -1,4 +1,4 @@
-function executeAll(node: SQLAll): ExecutionResult {
+function executeAll(node: SQLAll, context: Context): ExecutionResult {
     return {
         context: {
             tables: {},

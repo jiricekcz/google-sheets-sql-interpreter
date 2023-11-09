@@ -1,17 +1,17 @@
-function executeMultiplication(node: SQLMultiplication): ExecutionResult {
+function executeMultiplication(node: SQLMultiplication, context: Context): ExecutionResult {
 
     return {
         context: {
             tables: {},
             aliases: {}
         },
-        result: multiply(node.left, node.right)
+        result: multiply(node.left, node.right, context)
     }
 }
 
-function multiply(left: SQLNode, right: SQLNode): SQLPrimitive {
-    const leftValue = executeStatement(left).result;
-    const rightValue = executeStatement(right).result;
+function multiply(left: SQLNode, right: SQLNode, context: Context): SQLPrimitive {
+    const leftValue = executeStatement(left, context).result;
+    const rightValue = executeStatement(right, context).result;
 
     if (leftValue instanceof SQLNumber && rightValue instanceof SQLNumber) {
         return new SQLNumber(leftValue.value * rightValue.value);

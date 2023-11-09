@@ -1,4 +1,4 @@
-function executeIdentifier(node: SQLIdentifier): ExecutionResult {
+function executeIdentifier(node: SQLIdentifier, context: Context): ExecutionResult {
   const tables = getTableNames();
   if (tables.includes(node.value)) {
     return {
@@ -7,6 +7,15 @@ function executeIdentifier(node: SQLIdentifier): ExecutionResult {
         aliases: {}
       },
       result: new SQLTable([...getTableRows(node.value)], node.value)
+    }
+  }
+  if (context.has(node.value)) {
+    return {
+      context: {
+        tables: {},
+        aliases: {}
+      },
+      result: context.get(node.value)!
     }
   }
   return {

@@ -1,18 +1,19 @@
 function run(statements: SQLNode[]): SQLResult[] {
-    return statements.map(executeStatement).map(v => v.result);
+    return statements.map((v) => executeStatement(v, new Map())).map(v => v.result);
 }
 
 
-function executeStatement(statement: SQLNode): ExecutionResult {
+function executeStatement(statement: SQLNode, context: Context): ExecutionResult {
     switch (statement.type) {
-        case "addition": return executeAddition(statement);
-        case "subtraction": return executeSubtracion(statement);
-        case "multiplication": return executeMultiplication(statement);
-        case "numberLiteral": return executeNumberLiteral(statement);
-        case "equals": return executeEquals(statement);
-        case "selectFrom": return executeSelectFrom(statement);
-        case "identifier": return executeIdentifier(statement);
-        case "all": return executeAll(statement);
+        case "addition": return executeAddition(statement, context);
+        case "subtraction": return executeSubtracion(statement, context);
+        case "multiplication": return executeMultiplication(statement, context);
+        case "numberLiteral": return executeNumberLiteral(statement, context);
+        case "equals": return executeEquals(statement, context);
+        case "selectFrom": return executeSelectFrom(statement, context);
+        case "identifier": return executeIdentifier(statement, context);
+        case "all": return executeAll(statement, context);
+        case "where": return executeWhere(statement, context);
         default: throw new RuntimeError(`Unknown statement type ${statement.type}`);
     }
 }

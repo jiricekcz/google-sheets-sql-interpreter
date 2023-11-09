@@ -131,3 +131,5 @@ class SQLAllSelector extends SQLIdentifierValue {
 type SQLObject = SQLRow | SQLTable;
 
 type SQLResult = SQLPrimitive | SQLObject | SQLIdentifierValue | SQLAllSelector;
+
+type Context = Map<string, SQLResult>;
