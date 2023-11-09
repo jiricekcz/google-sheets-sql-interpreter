@@ -1,4 +1,4 @@
-function executeNumberLiteral(node: SQLNumberLiteral): ExecutionResult {
+function executeNumberLiteral(node: SQLNumberLiteral, context: Context): ExecutionResult {
     return {
         context: {
             tables: {},
