@@ -14,6 +14,7 @@ function executeStatement(statement: SQLNode, context: Context): ExecutionResult
         case "identifier": return executeIdentifier(statement, context);
         case "all": return executeAll(statement, context);
         case "where": return executeWhere(statement, context);
+        case "stringLiteral": return executeStringLiteral(statement, context);
         default: throw new RuntimeError(`Unknown statement type ${statement.type}`);
     }
 }
