@@ -10,6 +10,9 @@ function executeStatement(statement: SQLNode): ExecutionResult {
         case "multiplication": return executeMultiplication(statement);
         case "numberLiteral": return executeNumberLiteral(statement);
         case "equals": return executeEquals(statement);
+        case "selectFrom": return executeSelectFrom(statement);
+        case "identifier": return executeIdentifier(statement);
+        case "all": return executeAll(statement);
         default: throw new RuntimeError(`Unknown statement type ${statement.type}`);
     }
 }
